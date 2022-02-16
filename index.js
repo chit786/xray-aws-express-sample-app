@@ -51,6 +51,36 @@ app.get('/http-request/', (req, res) => {
   });
 });
 
+app.get('/http-request/1', (req, res) => {
+  const endpoint = 'https://amazon.com/';
+  https.get(endpoint, (response) => {
+    response.on('data', () => {});
+
+    response.on('error', (err) => {
+      res.send(`Encountered error while making HTTPS request: ${err}`);
+    });
+
+    response.on('end', () => {
+      res.send(`Successfully reached 1 with ${endpoint}.`);
+    });
+  });
+});
+
+app.get('/http-request/2', (req, res) => {
+  const endpoint = 'https://amazon.com/';
+  https.get(endpoint, (response) => {
+    response.on('data', () => {});
+
+    response.on('error', (err) => {
+      res.send(`Encountered error while making HTTPS request: ${err}`);
+    });
+
+    response.on('end', () => {
+      res.send(`Successfully reached 2 with ${endpoint}.`);
+    });
+  });
+});
+
 app.use(XRayExpress.closeSegment());
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
