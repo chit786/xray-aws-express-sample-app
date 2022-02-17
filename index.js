@@ -51,8 +51,9 @@ app.get('/http-request/', (req, res) => {
   });
 });
 
-app.get('/http-request/1', (req, res) => {
+app.get('/http-request/:id', (req, res) => {
   const endpoint = 'https://amazon.com/';
+  const _q = req.query.q;
   https.get(endpoint, (response) => {
     response.on('data', () => {});
 
@@ -61,22 +62,7 @@ app.get('/http-request/1', (req, res) => {
     });
 
     response.on('end', () => {
-      res.send(`Successfully reached 1 with ${endpoint}.`);
-    });
-  });
-});
-
-app.get('/http-request/2', (req, res) => {
-  const endpoint = 'https://amazon.com/';
-  https.get(endpoint, (response) => {
-    response.on('data', () => {});
-
-    response.on('error', (err) => {
-      res.send(`Encountered error while making HTTPS request: ${err}`);
-    });
-
-    response.on('end', () => {
-      res.send(`Successfully reached 2 with ${endpoint}.`);
+      res.send(`Successfully reached ${req.params.id} with ${endpoint}. Includes query q: ${_q}`);
     });
   });
 });
