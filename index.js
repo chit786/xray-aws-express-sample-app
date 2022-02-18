@@ -53,7 +53,10 @@ app.get('/http-request/', (req, res) => {
 
 app.get('/http-request/:id', (req, res) => {
   const endpoint = 'https://amazon.com/';
-  const _q = req.query.q;
+  const _q = req.query;
+  const _headers = req.headers;
+  const _params = req.params;
+  
   https.get(endpoint, (response) => {
     response.on('data', () => {});
 
@@ -62,7 +65,15 @@ app.get('/http-request/:id', (req, res) => {
     });
 
     response.on('end', () => {
-      res.send(`Successfully reached ${req.params.id} with ${endpoint}. Includes query q: ${_q}`);
+      const metaobject = {
+        query_params: _q,
+        headers: _headers,
+        params: _params,
+        reachedamazon: true
+      };
+      res.header("Content-Type",'application/json');
+      // res.send(`Successfully reached ${req.params.id} with ${endpoint}. Includes queries: ${JSON.stringify(_q)}, & headers: ${JSON.stringify(_headers)}`);
+      res.send(JSON.stringify(metaobject, null, 4));
     });
   });
 });
